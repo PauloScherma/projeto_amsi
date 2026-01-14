@@ -98,6 +98,7 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
         }else if (menuItem.getItemId()==R.id.navProfile) {
             setTitle("Profile");
         }else if (menuItem.getItemId()==R.id.navSettings) {
+            fragment = new SettingsFragment();
             setTitle("Settings");
         }else if (menuItem.getItemId()==R.id.navLogout) {
             Intent intent = new Intent(this , LoginActivity.class);

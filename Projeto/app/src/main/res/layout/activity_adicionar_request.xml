@@ -6,44 +6,36 @@
     android:padding="16dp"
     android:fitsSystemWindows="true">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".1"/>
+
     <EditText
-        android:id="@+id/etTitulo"
+        android:id="@+id/etTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Título"
+        android:hint="@string/title"
         android:inputType="textCapSentences" />
 
     <EditText
-        android:id="@+id/etAutor"
+        android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Autor"
+        android:hint="@string/description"
         android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/etSerie"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Série"
-        android:inputType="textCapSentences" />
-
-    <EditText
-        android:id="@+id/etAno"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Ano"
-        android:inputType="number" />
-
     <Button
         android:id="@+id/btnGuardar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/black"
-        android:text="Guardar Request"
+        android:text="@string/create_request"
         android:textColor="@color/white" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".1"/>
 </LinearLayout>

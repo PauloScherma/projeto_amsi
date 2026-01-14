@@ -62,7 +62,6 @@ public class ListaRequestsAdaptador extends BaseAdapter {
         private ImageButton btnDelete;
 
         public ViewHolderLista(View view) {
-            tvCapa = view.findViewById(R.id.tvCapa);
             tvTitulo = view.findViewById(R.id.tvTitulo);
             tvSerie = view.findViewById(R.id.tvSerie);
             tvAutor = view.findViewById(R.id.tvAutor);

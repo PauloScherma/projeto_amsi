@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".HomeFragment">
+    tools:context=".HomeFragment"
+    android:layout_marginHorizontal="12dp">
 
     <Space
         android:layout_width="match_parent"
@@ -29,7 +30,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCreateRequest"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:backgroundTint="@color/black"
         android:text="@string/create_a_request"
@@ -42,7 +43,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCreateProfile"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/black"
         android:text="@string/create_a_profile"
         android:textAllCaps="false"
@@ -54,7 +55,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddDocument"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/black"
         android:text="@string/add_a_document"
         android:textAllCaps="false"

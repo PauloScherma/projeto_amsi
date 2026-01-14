@@ -18,38 +18,30 @@
         android:clickable="false">
 
         <TextView
-            android:id="@+id/tvCapa"
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="Capa" />
+            android:text="@string/title" />
 
         <TextView
-            android:id="@+id/tvTitulo"
+            android:id="@+id/tvDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="Title" />
+            android:text="@string/description" />
 
         <TextView
-            android:id="@+id/tvAutor"
+            android:id="@+id/tvTechnician"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Author" />
+            android:text="@string/technician" />
 
         <TextView
-            android:id="@+id/tvSerie"
+            android:id="@+id/tvCreated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Series" />
-
-        <TextView
-            android:id="@+id/tvAno"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Year" />
+            android:text="@string/created_at" />
     </LinearLayout>
 
     <ImageButton

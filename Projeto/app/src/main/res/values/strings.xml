@@ -26,4 +26,9 @@
     <string name="please_fill_out_the_following_fields_to_signup">Please fill out the following fields to signup</string>
     <string name="username">Username</string>
     <string name="back_to_login">Back to login</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="technician">Technician</string>
+    <string name="created_at">Created at</string>
+    <string name="create_request">Create Request</string>
 </resources>
