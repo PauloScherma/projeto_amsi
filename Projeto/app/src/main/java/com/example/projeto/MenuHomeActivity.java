@@ -36,14 +36,16 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu_home);
+        super.onCreate(savedInstanceState); // Call this first
+        setContentView(R.layout.activity_menu_home); // Then set the layout
 
+        // Initialize views and managers
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navView);
         navigationView.setNavigationItemSelectedListener(this);
+        fragmentManager = getSupportFragmentManager();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 drawer, toolbar, R.string.ndOpen, R.string.ndClose);
@@ -52,6 +54,14 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
         carregarCabecalho();
 
         setTitle("Home");
+
+        // NOW you can safely use fragmentManager and navigationView
+        if (savedInstanceState == null) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contentFragment, new HomeFragment())
+                    .commit();
+            // navigationView.setCheckedItem(R.id.navHome);
+        }
     }
 
     private void carregarCabecalho() {
@@ -74,22 +84,30 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Fragment fragment = null;
         if(menuItem.getItemId()==R.id.navHome){
-            System.out.println("Home");
+            fragment = new HomeFragment();
+            setTitle("Home");
         }
         else if(menuItem.getItemId()==R.id.navRequest){
-            System.out.println("Request");
+            fragment = new RequestsFragment();
+            setTitle("Requests");
         } else if (menuItem.getItemId()==R.id.navDocuments) {
             System.out.println("Documents");
+            setTitle("Documents");
         }else if (menuItem.getItemId()==R.id.navProfile) {
-            System.out.println("Profile");
+            setTitle("Profile");
         }else if (menuItem.getItemId()==R.id.navSettings) {
-            System.out.println("Settings");
+            setTitle("Settings");
         }else if (menuItem.getItemId()==R.id.navLogout) {
             Intent intent = new Intent(this , LoginActivity.class);
             startActivity(intent);
             finish();
         }
+
+        if (fragment!= null)
+            fragmentManager.beginTransaction().replace(R.id.contentFragment,
+                    fragment).commit();
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

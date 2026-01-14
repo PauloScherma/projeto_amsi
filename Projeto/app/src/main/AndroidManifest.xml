@@ -12,6 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Projeto">
         <activity
+            android:name=".AdicionarRequestActivity"
+            android:exported="false"
+            android:label="Adicionar Request"
+            android:parentActivityName=".MenuHomeActivity" />
+        <activity
+            android:name=".DetalhesRequestActivity"
+            android:exported="false"
+            android:label="Detalhes do Pedido"
+            android:parentActivityName=".MenuHomeActivity" />
+        <activity
             android:name=".CreateAccountActivity"
             android:exported="false" />
         <activity
