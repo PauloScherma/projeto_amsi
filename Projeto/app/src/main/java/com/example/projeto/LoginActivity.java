@@ -50,6 +50,12 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    public void onClickCreateAccount(View view) {
+        Intent intent = new Intent(this, CreateAccountActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private boolean isEmailValido(String email){
         if (email==null)
             return false;

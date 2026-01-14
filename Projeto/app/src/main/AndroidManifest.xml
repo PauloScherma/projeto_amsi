@@ -12,16 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Projeto">
         <activity
+            android:name=".CreateAccountActivity"
+            android:exported="false" />
+        <activity
             android:name=".MenuHomeActivity"
             android:exported="false"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.Projeto.NoActionBar"/>
-
-        <activity
-            android:name=".HomeActivity"
-            android:exported="false"
-            android:launchMode="singleTop"/>
-
+            android:theme="@style/Theme.Projeto.NoActionBar" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">

@@ -1,6 +1,7 @@
 package com.example.projeto;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -49,6 +50,8 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
         toggle.syncState();
         drawer.addDrawerListener(toggle);
         carregarCabecalho();
+
+        setTitle("Home");
     }
 
     private void carregarCabecalho() {
@@ -83,10 +86,24 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
         }else if (menuItem.getItemId()==R.id.navSettings) {
             System.out.println("Settings");
         }else if (menuItem.getItemId()==R.id.navLogout) {
-            System.out.println("Logout");
+            Intent intent = new Intent(this , LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void onClickCreateRequest(View view) {
+        System.out.println("Request");
+    }
+
+    public void onClickCreateProfile(View view) {
+        System.out.println("Profile");
+    }
+
+    public void onClickAddDocument(View view) {
+        System.out.println("Documents");
     }
 }

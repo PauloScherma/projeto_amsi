@@ -99,7 +99,7 @@
         android:textAllCaps="false"
         android:backgroundTint="@android:color/white"
         android:onClick="onClickCreateAccount"
-        app:cornerRadius="100dp"/>
+        app:cornerRadius="12dp"/>
 
     <Space
         android:layout_width="match_parent"
