@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">projeto</string>
+    <string name="login">Login</string>
+    <string name="insert_email">Insert Email</string>
+    <string name="email">Email</string>
+    <string name="insert_password">Insert Password</string>
+    <string name="password">Password</string>
+    <string name="log_in">Login</string>
+    <string name="create_account">Create Account\n</string>
+    <string name="logout">Logout</string>
+    <string name="settings">Settings</string>
+    <string name="profile">Profile</string>
+    <string name="documents">Documents</string>
+    <string name="requests">Requests</string>
+    <string name="home">Home</string>
+    <string name="menu">Menu\n</string>
+    <string name="app">App</string>
+    <string name="ndOpen">ndOpen</string>
+    <string name="ndClose">ndClose</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
