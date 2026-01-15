@@ -10,11 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import pt.ipleiria.estg.dei.ourapppsiassist.R;
 
 public class SettingsFragment extends Fragment {
 
@@ -26,11 +22,9 @@ public class SettingsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView( LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
@@ -39,7 +33,6 @@ public class SettingsFragment extends Fragment {
 
         SharedPreferences prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
-        // Carregar valor guardado
         String savedUrl = prefs.getString(KEY_BASE_URL, "");
         edtBaseUrl.setText(savedUrl);
 
