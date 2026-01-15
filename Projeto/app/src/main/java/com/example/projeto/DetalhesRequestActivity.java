@@ -17,7 +17,7 @@ public class DetalhesRequestActivity extends AppCompatActivity {
     public static final String ID_REQUEST = "ID";
     private static final int EDIT_REQUEST_CODE = 1;
     
-    private TextView tvTitulo, tvAutor, tvSerie, tvAno;
+    private TextView tvTitle, tvDescription;
     private FloatingActionButton fabEdit;
     private Request request;
     private int requestId;
@@ -27,10 +27,8 @@ public class DetalhesRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_request);
 
-        tvTitulo = findViewById(R.id.tvTitulo);
-        tvAutor = findViewById(R.id.tvAutor);
-        tvSerie = findViewById(R.id.tvSerie);
-        tvAno = findViewById(R.id.tvAno);
+        tvTitle = findViewById(R.id.tvTitle);
+        tvDescription = findViewById(R.id.tvDescription);
         fabEdit = findViewById(R.id.fabEdit);
 
         if (getSupportActionBar() != null) {
@@ -54,11 +52,9 @@ public class DetalhesRequestActivity extends AppCompatActivity {
         if (requestId != -1) {
             request = SingletonGestorRequests.getInstance(this).getRequest(requestId);
             if (request != null) {
-                setTitle("Detalhes: " + request.getTitulo());
-                tvTitulo.setText(request.getTitulo());
-                tvAutor.setText(request.getAutor());
-                tvSerie.setText(request.getSerie());
-                tvAno.setText(String.valueOf(request.getAno()));
+                setTitle("Detalhes: " + request.getTitle());
+                tvTitle.setText(request.getTitle());
+                tvDescription.setText(request.getDescription());
             }
         }
     }

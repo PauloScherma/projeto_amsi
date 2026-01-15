@@ -2,83 +2,61 @@ package com.example.projeto.modelo;
 
 public class Request {
 
-    private int id, ano;
+    private int id;
+    private int customerId;
+    private String title;
+    private String description;
+    private Priority priority;
+    private Status status;
+    private int currentTechnicianId;
+    private String canceledAt;
+    private int canceledBy;
+    private String createdAt;
+    private String updatedAt;
 
-    private String titulo, serie, autor, capa;
-
-    /*public Request(int id, int customer_id, String title, String description, ENUM('low', 'medium', 'high') priority,
-    ENUM('new', 'in_progress', 'completed', 'canceled') status, int current_technician_id, DATETIME canceled_at, int canceled_by,
-    DATETIME created_at, DATETIME updated_at){
+    public Request(int id, int customerId, String title, String description, Priority priority,
+                   Status status, int currentTechnicianId, String canceledAt, int canceledBy,
+                   String createdAt, String updatedAt) {
         this.id = id;
-        this.customer_id = customer_id;
+        this.customerId = customerId;
         this.title = title;
         this.description = description;
         this.priority = priority;
         this.status = status;
-        this.current_technician_id = current_technician_id;
-        this.canceled_at = canceled_at;
-        this.canceled_by = canceled_by;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.currentTechnicianId = currentTechnicianId;
+        this.canceledAt = canceledAt;
+        this.canceledBy = canceledBy;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    //respetivos getters e setters
-    */
+    // Getters and Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public Request(int id, String capa, int ano, String titulo, String serie, String autor) {
-        this.id =id;
-        this.ano = ano;
-        this.capa = capa;
-        this.titulo = titulo;
-        this.serie = serie;
-        this.autor = autor;
-    }
+    public int getCustomerId() { return customerId; }
+    public void setCustomerId(int customerId) { this.customerId = customerId; }
 
-    public int getId() {
-        return id;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public int getAno() {
-        return ano;
-    }
+    public Priority getPriority() { return priority; }
+    public void setPriority(Priority priority) { this.priority = priority; }
 
-    public void setAno(int ano) {
-        this.ano = ano;
-    }
+    public Status getStatus() { return status; }
+    public void setStatus(Status status) { this.status = status; }
 
-    public String getCapa() {
-        return capa;
-    }
+    public int getCurrentTechnicianId() { return currentTechnicianId; }
+    public void setCurrentTechnicianId(int currentTechnicianId) { this.currentTechnicianId = currentTechnicianId; }
 
-    public void setCapa(String capa) {
-        this.capa = capa;
-    }
+    public String getCanceledAt() { return canceledAt; }
 
-    public String getTitulo() {
-        return titulo;
-    }
+    public int getCanceledBy() { return canceledBy; }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
+    public String getCreatedAt() { return createdAt; }
 
-    public String getSerie() {
-        return serie;
-    }
-
-    public void setSerie(String serie) {
-        this.serie = serie;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
+    public String getUpdatedAt() { return updatedAt; }
 }

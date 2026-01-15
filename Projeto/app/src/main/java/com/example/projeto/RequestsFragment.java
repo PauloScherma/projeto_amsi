@@ -1,6 +1,8 @@
 package com.example.projeto;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -24,6 +26,9 @@ public class RequestsFragment extends Fragment implements RequestsListener {
     private ArrayList<Request> requests;
     private FloatingActionButton fabAdd;
     private ListaRequestsAdaptador adapter;
+
+    private static final String PREFS_NAME = "APP_PREFS";
+    private static final String KEY_BASE_URL = "base_url";
 
     public RequestsFragment(){}
 
@@ -56,6 +61,10 @@ public class RequestsFragment extends Fragment implements RequestsListener {
                 startActivity(intent);
             }
         });
+
+        SharedPreferences prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String savedUrl = prefs.getString(KEY_BASE_URL, "");
+        System.out.println("URL: " + savedUrl);
 
         return view;
     }

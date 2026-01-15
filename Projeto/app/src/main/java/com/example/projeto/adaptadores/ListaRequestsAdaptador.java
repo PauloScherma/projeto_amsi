@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.projeto.R;
@@ -20,9 +19,9 @@ public class ListaRequestsAdaptador extends BaseAdapter {
     private LayoutInflater inflater;
     private ArrayList<Request> requests;
 
-    public ListaRequestsAdaptador(Context context, ArrayList<Request> livros) {
+    public ListaRequestsAdaptador(Context context, ArrayList<Request> requests) {
         this.context = context;
-        this.requests = livros;
+        this.requests = requests;
     }
 
     @Override
@@ -58,23 +57,24 @@ public class ListaRequestsAdaptador extends BaseAdapter {
     }
 
     private class ViewHolderLista {
-        private TextView tvCapa, tvTitulo, tvSerie, tvAutor, tvAno;
+        private TextView tvTitle, tvDescription, tvStatus, tvPriority, tvCreated;
         private ImageButton btnDelete;
 
         public ViewHolderLista(View view) {
-            tvTitulo = view.findViewById(R.id.tvTitulo);
-            tvSerie = view.findViewById(R.id.tvSerie);
-            tvAutor = view.findViewById(R.id.tvAutor);
-            tvAno = view.findViewById(R.id.tvAno);
+            tvTitle = view.findViewById(R.id.tvTitle);
+            tvDescription = view.findViewById(R.id.tvDescription);
+            tvStatus = view.findViewById(R.id.tvStatus);
+            tvPriority = view.findViewById(R.id.tvPriority);
+            tvCreated = view.findViewById(R.id.tvCreated);
             btnDelete = view.findViewById(R.id.btnDelete);
         }
 
-        public void update(Request request) {
-            tvCapa.setText(request.getCapa());
-            tvTitulo.setText(request.getTitulo());
-            tvSerie.setText(request.getSerie());
-            tvAutor.setText(request.getAutor());
-            tvAno.setText(String.valueOf(request.getAno()));
+        public void update(final Request request) {
+            tvTitle.setText(request.getTitle());
+            tvDescription.setText(request.getDescription());
+            tvStatus.setText(request.getStatus().toString());
+            tvPriority.setText(request.getPriority().toString());
+            tvCreated.setText("Created: " + (request.getCreatedAt() != null ? request.getCreatedAt() : "N/A"));
 
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
