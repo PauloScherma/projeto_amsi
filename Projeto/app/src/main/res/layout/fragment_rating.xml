@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RequestsFragment">
+    tools:context=".RatingFragment">
 
     <ListView
-        android:id="@+id/lvRequests"
+        android:id="@+id/lvRatings"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

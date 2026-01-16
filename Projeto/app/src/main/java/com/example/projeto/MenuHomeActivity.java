@@ -22,6 +22,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.projeto.modelo.Rating;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -93,19 +94,20 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
             fragment = new RequestsFragment();
             setTitle("Requests");
         } else if (menuItem.getItemId()==R.id.navDocuments) {
-            System.out.println("Documents");
-            setTitle("Documents");
+            fragment = new RatingFragment();
+            setTitle("Rating");
         }else if (menuItem.getItemId()==R.id.navProfile) {
             setTitle("Profile");
+            fragment = new ProfileFragment();
         }else if (menuItem.getItemId()==R.id.navSettings) {
             System.out.println("Settings");
             setTitle("Settings");
             fragment = new SettingsFragment();
-        }//else if (menuItem.getItemId()==R.id.navLogout) {
-//            Intent intent = new Intent(this , LoginActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
+        }else if (menuItem.getItemId()==R.id.navLogout) {
+            Intent intent = new Intent(this , LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         if (fragment!= null)
             fragmentManager.beginTransaction().replace(R.id.contentFragment,

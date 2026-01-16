@@ -5,18 +5,44 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/config_the_url"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="48sp"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/server_for_api" />
+
     <EditText
         android:id="@+id/edtBaseUrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="URL da API (http://172.22.21.234/Projeto/projeto_v1/backend/web/api/endpoint)"
-        android:inputType="textUri" />
+        android:hint="@string/url_da_api" />
 
     <Button
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Guardar"
+        android:text="@string/guardar"
         android:layout_marginTop="12dp"/>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"/>
 </LinearLayout>

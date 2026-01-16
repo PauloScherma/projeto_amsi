@@ -2,6 +2,9 @@ package com.example.projeto;
 
 import static androidx.core.content.ContentProviderCompat.requireContext;
 
+import static com.example.projeto.utils.Constants.BASE_URL;
+import static com.example.projeto.utils.Constants.PREFS_NAME;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,11 +32,8 @@ import org.json.JSONObject;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
-    private static final String TOKEN = "TOKEN";
-    //private String baseUrl = "http://10.0.2.2/projeto/projeto_v1/backend/web/api";
-    private String baseUrl = "http://172.22.21.234/Projeto/projeto_v1/backend/web/api";
 
-    private final String loginEndpoint = baseUrl + "/user/login";
+    private final String loginEndpoint = BASE_URL + "/user/login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = etEmail.getText().toString();
         String pass = etPassword.getText().toString();
 
+        SharedPreferences prefs = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
         if (!isPasswordValida(pass)) {
             etPassword.setError("Password invalida");
@@ -73,7 +74,13 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // Sucesso: Navegar para Home
+                        try {
+                            prefs.edit().putString("token", response.getString("access_token")).apply();
+                            prefs.edit().putString("user_id", response.getString("user_id")).apply();
+                        } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                        }
+
                         Intent intent = new Intent(LoginActivity.this, MenuHomeActivity.class);
                         intent.putExtra("EMAIL", email);
                         startActivity(intent);

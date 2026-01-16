@@ -8,11 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projeto.listeners.RequestListener;
 import com.example.projeto.modelo.Request;
 import com.example.projeto.modelo.SingletonGestorRequests;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class DetalhesRequestActivity extends AppCompatActivity {
+public class DetalhesRequestActivity extends AppCompatActivity implements RequestListener {
 
     public static final String ID_REQUEST = "ID";
     private static final int EDIT_REQUEST_CODE = 1;
@@ -36,7 +37,9 @@ public class DetalhesRequestActivity extends AppCompatActivity {
         }
 
         requestId = getIntent().getIntExtra(ID_REQUEST, -1);
-        carregarRequestEPopular();
+
+        SingletonGestorRequests.getInstance(this).setRequestListener(this);
+        SingletonGestorRequests.getInstance(this).getRequestByIdAPI(this, requestId);
 
         fabEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,14 +51,12 @@ public class DetalhesRequestActivity extends AppCompatActivity {
         });
     }
 
-    private void carregarRequestEPopular() {
-        if (requestId != -1) {
-            request = SingletonGestorRequests.getInstance(this).getRequest(requestId);
-            if (request != null) {
-                setTitle("Detalhes: " + request.getTitle());
-                tvTitle.setText(request.getTitle());
-                tvDescription.setText(request.getDescription());
-            }
+    private void popularDados() {
+
+        if (request != null) {
+            setTitle("Detalhes: " + request.getTitle());
+            tvTitle.setText(request.getTitle());
+            tvDescription.setText(request.getDescription());
         }
     }
 
@@ -64,7 +65,7 @@ public class DetalhesRequestActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EDIT_REQUEST_CODE) {
             // Recarrega os dados caso tenham sido alterados
-            carregarRequestEPopular();
+            popularDados();
         }
     }
 
@@ -72,5 +73,23 @@ public class DetalhesRequestActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    public void onRefreshDetalhes() {
+        request = SingletonGestorRequests.getInstance(this).getRequest();
+
+        popularDados();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SingletonGestorRequests.getInstance(this).setRequestListener(null);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SingletonGestorRequests.getInstance(this).setRequestListener(this);
     }
 }

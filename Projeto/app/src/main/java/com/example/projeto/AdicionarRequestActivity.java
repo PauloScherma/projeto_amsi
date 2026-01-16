@@ -1,5 +1,9 @@
 package com.example.projeto;
 
+import static com.example.projeto.utils.Constants.PREFS_NAME;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -10,16 +14,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projeto.listeners.RequestListener;
 import com.example.projeto.modelo.Priority;
 import com.example.projeto.modelo.Request;
 import com.example.projeto.modelo.SingletonGestorRequests;
 import com.example.projeto.modelo.Status;
 
-public class AdicionarRequestActivity extends AppCompatActivity {
+public class AdicionarRequestActivity extends AppCompatActivity implements RequestListener {
 
     public static final String ID_REQUEST = "ID";
-    private EditText etTitle, etDescription, etCustomerId, etTechnicianId;
-    private Spinner spPriority, spStatus;
+    private EditText etTitle, etDescription;
     private Button btnGuardar;
     private Request request;
     private int id;
@@ -29,19 +33,13 @@ public class AdicionarRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adicionar_request);
 
+        SharedPreferences prefs = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+        String userId = prefs.getString("user_id", "");
+
         etTitle = findViewById(R.id.etTitle);
         etDescription = findViewById(R.id.etDescription);
-        etCustomerId = findViewById(R.id.etCustomerId);
-        etTechnicianId = findViewById(R.id.etTechnicianId);
-        spPriority = findViewById(R.id.spPriority);
-        spStatus = findViewById(R.id.spStatus);
         btnGuardar = findViewById(R.id.btnGuardar);
-
-        // Initialize Spinners with Enum values
-        spPriority.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, Priority.values()));
-        spStatus.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, Status.values()));
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -50,10 +48,8 @@ public class AdicionarRequestActivity extends AppCompatActivity {
         id = getIntent().getIntExtra(ID_REQUEST, -1);
         if (id != -1) {
             setTitle("Editar Request");
-            request = SingletonGestorRequests.getInstance(this).getRequest(id);
-            if (request != null) {
-                carregarRequest();
-            }
+            SingletonGestorRequests.getInstance(this).setRequestListener(this);
+            SingletonGestorRequests.getInstance(this).getRequestByIdAPI(getApplicationContext(), id);
         } else {
             setTitle("Adicionar Request");
         }
@@ -63,14 +59,13 @@ public class AdicionarRequestActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String title = etTitle.getText().toString();
                 String description = etDescription.getText().toString();
-                String custIdStr = etCustomerId.getText().toString();
-                String techIdStr = etTechnicianId.getText().toString();
+                String custIdStr = userId;
 
                 if (!title.isEmpty() && !description.isEmpty()) {
                     int custId = custIdStr.isEmpty() ? 0 : Integer.parseInt(custIdStr);
-                    int techId = techIdStr.isEmpty() ? 0 : Integer.parseInt(techIdStr);
-                    Priority priority = (Priority) spPriority.getSelectedItem();
-                    Status status = (Status) spStatus.getSelectedItem();
+                    int techId = 0;
+                    Priority priority = Priority.MEDIUM;
+                    Status status = Status.NEW;
 
                     if (request != null) {
                         // Modo Edição
@@ -80,13 +75,13 @@ public class AdicionarRequestActivity extends AppCompatActivity {
                         request.setCurrentTechnicianId(techId);
                         request.setPriority(priority);
                         request.setStatus(status);
-                        SingletonGestorRequests.getInstance(getApplicationContext()).editarRequest(request);
+                        SingletonGestorRequests.getInstance(getApplicationContext()).editarRequestAPI(request, getApplicationContext());
                     } else {
                         // Modo Adição
                         Request newRequest = new Request(0, custId, title, description,
                                 priority, status, techId, null, 0, null, null);
 
-                        SingletonGestorRequests.getInstance(getApplicationContext()).adicionarRequest(newRequest);
+                        SingletonGestorRequests.getInstance(getApplicationContext()).adicionarRequestAPI(newRequest, getApplicationContext());
                     }
                     finish();
                 } else {
@@ -99,12 +94,18 @@ public class AdicionarRequestActivity extends AppCompatActivity {
     private void carregarRequest() {
         etTitle.setText(request.getTitle());
         etDescription.setText(request.getDescription());
-        etCustomerId.setText(String.valueOf(request.getCustomerId()));
-        etTechnicianId.setText(String.valueOf(request.getCurrentTechnicianId()));
+    }
 
-        // Set Spinner selections
-        spPriority.setSelection(((ArrayAdapter)spPriority.getAdapter()).getPosition(request.getPriority()));
-        spStatus.setSelection(((ArrayAdapter)spStatus.getAdapter()).getPosition(request.getStatus()));
+    @Override
+    public void onRefreshDetalhes() {
+        this.request = SingletonGestorRequests.getInstance(this).getRequest();
+
+        if (this.request != null) {
+            carregarRequest();
+        } else {
+            Toast.makeText(this, "Não foi possível carregar os detalhes do pedido.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     @Override

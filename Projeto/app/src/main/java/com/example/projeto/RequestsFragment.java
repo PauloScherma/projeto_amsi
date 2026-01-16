@@ -1,8 +1,6 @@
 package com.example.projeto;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -22,13 +20,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class RequestsFragment extends Fragment implements RequestsListener {
+    private RequestsListener requestsListener;
     private ListView lvRequests;
-    private ArrayList<Request> requests;
+    private ArrayList<Request> requests = new ArrayList<>();
     private FloatingActionButton fabAdd;
     private ListaRequestsAdaptador adapter;
-
-    private static final String PREFS_NAME = "APP_PREFS";
-    private static final String KEY_BASE_URL = "base_url";
 
     public RequestsFragment(){}
 
@@ -39,8 +35,11 @@ public class RequestsFragment extends Fragment implements RequestsListener {
 
         lvRequests = view.findViewById(R.id.lvRequests);
         fabAdd = view.findViewById(R.id.fabAdd);
-        
-        requests = SingletonGestorRequests.getInstance(getContext()).getRequests();
+
+        SingletonGestorRequests.getInstance(getContext()).setRequestsListener(this);
+        SingletonGestorRequests.getInstance(getContext()).getUserRequestsAPI(getContext());
+
+        // requests = SingletonGestorRequests.getInstance(getContext()).getRequests();
 
         adapter = new ListaRequestsAdaptador(getContext(), requests);
         lvRequests.setAdapter(adapter);
@@ -61,10 +60,6 @@ public class RequestsFragment extends Fragment implements RequestsListener {
                 startActivity(intent);
             }
         });
-
-        SharedPreferences prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String savedUrl = prefs.getString(KEY_BASE_URL, "");
-        System.out.println("URL: " + savedUrl);
 
         return view;
     }

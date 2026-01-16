@@ -33,48 +33,6 @@
                 android:minLines="3"
                 android:gravity="top"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Priority"
-                android:textStyle="bold" />
-
-            <Spinner
-                android:id="@+id/spPriority"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Status"
-                android:textStyle="bold" />
-
-            <Spinner
-                android:id="@+id/spStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp" />
-
-            <EditText
-                android:id="@+id/etCustomerId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Customer ID"
-                android:inputType="number" />
-
-            <EditText
-                android:id="@+id/etTechnicianId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Technician ID"
-                android:inputType="number" />
-
         </LinearLayout>
     </ScrollView>
 

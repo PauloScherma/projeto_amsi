@@ -32,4 +32,15 @@
     <string name="created_at">Created at</string>
     <string name="create_request">Create Request</string>
     <string name="ano">Ano</string>
+    <string name="insert_username">Insert Username</string>
+    <string name="welcome">Welcome</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone">Phone</string>
+    <string name="change_your_profile">Change your profile</string>
+    <string name="guardar">Guardar</string>
+    <string name="url_da_api">URL da API</string>
+    <string name="server_for_api">Server for API</string>
+    <string name="config_the_url">Config the url</string>
+    <string name="add_request">Add Request</string>
 </resources>
