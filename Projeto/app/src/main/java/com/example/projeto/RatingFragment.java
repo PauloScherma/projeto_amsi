@@ -12,13 +12,16 @@ import android.widget.ListView;
 
 import com.example.projeto.adaptadores.ListaRatingAdaptador;
 import com.example.projeto.adaptadores.ListaRequestsAdaptador;
+import com.example.projeto.listeners.RatingListener;
+import com.example.projeto.listeners.RatingsListener;
 import com.example.projeto.modelo.Rating;
+import com.example.projeto.modelo.Request;
 import com.example.projeto.modelo.SingletonGestorRequests;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class RatingFragment extends Fragment {
+public class RatingFragment extends Fragment implements RatingsListener {
 
     private ListView lvRatings;
     private ArrayList<Rating> ratings;
@@ -43,7 +46,9 @@ public class RatingFragment extends Fragment {
         fabAdd = view.findViewById(R.id.fabAdd);
         lvRatings = view.findViewById(R.id.lvRatings);
 
-        ratings = SingletonGestorRequests.getInstance(getContext()).getRatings();
+        SingletonGestorRequests.getInstance(getContext()).setRatingsListener(this);
+        SingletonGestorRequests.getInstance(getContext()).getUserRatignsAPI(getContext());
+
         adapter = new ListaRatingAdaptador(getContext(), ratings);
         lvRatings.setAdapter(adapter);
 
@@ -56,5 +61,13 @@ public class RatingFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onRefreshListaRatings(ArrayList<Rating> listaRatings) {
+        if (listaRatings!=null) {
+            adapter = new ListaRatingAdaptador(getContext(), listaRatings);
+            lvRatings.setAdapter(adapter);
+        }
     }
 }

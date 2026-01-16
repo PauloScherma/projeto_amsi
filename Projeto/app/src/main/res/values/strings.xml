@@ -43,4 +43,9 @@
     <string name="server_for_api">Server for API</string>
     <string name="config_the_url">Config the url</string>
     <string name="add_request">Add Request</string>
+    <string name="save_request">Save Request</string>
+    <string name="save_your_profile">Save your profile</string>
+    <string name="save_profile">Save Profile</string>
+    <string name="rating">Rating</string>
+    <string name="save">save</string>
 </resources>

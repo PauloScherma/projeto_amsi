@@ -30,7 +30,7 @@
                 android:layout_marginTop="8dp"
                 android:hint="@string/description"
                 android:inputType="textMultiLine"
-                android:minLines="3"
+
                 android:gravity="top"/>
 
         </LinearLayout>
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/black"
-        android:text="@string/create_request"
+        android:text="@string/save_request"
         android:textColor="@color/white" />
 
 </LinearLayout>

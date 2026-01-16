@@ -63,18 +63,13 @@ public class ListaRequestsAdaptador extends BaseAdapter {
         viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Criar um diálogo de confirmação para uma melhor experiência do utilizador
                 new AlertDialog.Builder(context)
                         .setTitle("Apagar Pedido")
                         .setMessage("Tem a certeza que deseja apagar este pedido?")
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // 4. Chamar o método da API para apagar o pedido específico
-                                // O 'currentRequest' tem o ID e outras informações necessárias
                                 SingletonGestorRequests.getInstance(context).removerRequestAPI(currentRequest, context);
-
-                                // Feedback para o utilizador
                                 Toast.makeText(context, "Pedido a ser apagado...", Toast.LENGTH_SHORT).show();
                             }
                         })

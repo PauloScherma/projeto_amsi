@@ -17,7 +17,6 @@ public class DetalhesRequestActivity extends AppCompatActivity implements Reques
 
     public static final String ID_REQUEST = "ID";
     private static final int EDIT_REQUEST_CODE = 1;
-    
     private TextView tvTitle, tvDescription;
     private FloatingActionButton fabEdit;
     private Request request;
@@ -64,7 +63,6 @@ public class DetalhesRequestActivity extends AppCompatActivity implements Reques
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EDIT_REQUEST_CODE) {
-            // Recarrega os dados caso tenham sido alterados
             popularDados();
         }
     }

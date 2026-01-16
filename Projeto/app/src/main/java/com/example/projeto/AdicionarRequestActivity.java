@@ -46,6 +46,7 @@ public class AdicionarRequestActivity extends AppCompatActivity implements Reque
         }
 
         id = getIntent().getIntExtra(ID_REQUEST, -1);
+
         if (id != -1) {
             setTitle("Editar Request");
             SingletonGestorRequests.getInstance(this).setRequestListener(this);

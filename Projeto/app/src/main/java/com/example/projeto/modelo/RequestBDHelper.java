@@ -113,7 +113,6 @@ public class RequestBDHelper extends SQLiteOpenHelper {
         values.put(UPDATED_AT, r.getUpdatedAt());
         db.insert(TABELA_REQUEST, null, values);
     }
-
     public boolean editarRequestBD(Request r) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -130,18 +129,15 @@ public class RequestBDHelper extends SQLiteOpenHelper {
         int numLinhas = db.update(TABELA_REQUEST, values, ID + " = ?", new String[]{String.valueOf(r.getId())});
         return numLinhas > 0;
     }
-
     public boolean removerRequestBD(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         int numLinhas = db.delete(TABELA_REQUEST, ID + " = ?", new String[]{String.valueOf(id)});
         return numLinhas > 0;
     }
-
     public void removerAllRequestsBD() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABELA_REQUEST, null, null);
     }
-
     public ArrayList<Request> getAllRequestsBD() {
         ArrayList<Request> requests = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -227,6 +223,83 @@ public class RequestBDHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return ratings;
+    }
+    //endregion
+
+    //region PROFILE DB
+    public void adicionarProfileBD(Profile p) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(USER_ID, p.getUserId());
+        values.put(FIRST_NAME, p.getFirstName());
+        values.put(LAST_NAME, p.getLastName());
+        values.put(PHONE, p.getPhone());
+        values.put(CREATED_AT, p.getCreatedAt());
+        values.put(UPDATED_AT, p.getUpdatedAt());
+        db.insert(TABELA_PROFILE, null, values);
+    }
+    public boolean editarProfileBD(Profile p) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(USER_ID, p.getUserId());
+        values.put(FIRST_NAME, p.getFirstName());
+        values.put(LAST_NAME, p.getLastName());
+        values.put(PHONE, p.getPhone());
+        values.put(CREATED_AT, p.getCreatedAt());
+        values.put(UPDATED_AT, p.getUpdatedAt());
+        int numLinhas = db.update(TABELA_PROFILE, values, ID + " = ?", new String[]{String.valueOf(p.getId())});
+        return numLinhas > 0;
+    }
+    public boolean removerProfileBD(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int numLinhas = db.delete(TABELA_PROFILE, ID + " = ?", new String[]{String.valueOf(id)});
+        return numLinhas > 0;
+    }
+    public void removerAllProfilesBD() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABELA_PROFILE, null, null);
+    }
+    public ArrayList<Profile> getAllProfilesBD() {
+        ArrayList<Profile> profiles = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABELA_PROFILE, null, null, null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                Profile auxProfile = new Profile(
+                        cursor.getInt(0),
+                        cursor.getInt(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getString(5),
+                        cursor.getString(6)
+                );
+                profiles.add(auxProfile);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return profiles;
+    }
+    public Profile getProfilePorUserIdBD(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Profile profile = null;
+        String selection = USER_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(userId)};
+        Cursor cursor = db.query(TABELA_PROFILE, null, selection, selectionArgs, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            profile = new Profile(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(ID)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(USER_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FIRST_NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(LAST_NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PHONE)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(CREATED_AT)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(UPDATED_AT))
+            );
+            cursor.close();
+        }
+        return profile;
     }
     //endregion
 }

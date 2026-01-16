@@ -56,13 +56,4 @@ public class RequestJsonParser {
         }
         return auxRequest;
     }
-
-//    public static boolean isConnectionInternet(Context context) {
-//        ConnectivityManager cm= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//        if (cm!=null) {
-//            NetworkInfo ni = cm.getActiveNetworkInfo();
-//            return ni != null && ni.isConnected();
-//        }
-//        return false;
-//    }
 }

@@ -16,7 +16,7 @@
                     android:icon="@drawable/ic_action_request"/>
 
                 <item android:id="@+id/navDocuments"
-                    android:title="@string/documents"
+                    android:title="@string/rating"
                     android:icon="@drawable/ic_action_attach"/>
 
                 <item android:id="@+id/navProfile"
