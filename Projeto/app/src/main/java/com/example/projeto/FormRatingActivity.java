@@ -36,7 +36,7 @@ public class FormRatingActivity extends AppCompatActivity implements RatingListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_adicionar_rating);
+        setContentView(R.layout.activity_form_rating);
 
         etTitle = findViewById(R.id.etTitle);
         etDescription = findViewById(R.id.etDescription);

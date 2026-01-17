@@ -15,21 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Projeto">
         <activity
-            android:name=".DetalhesRatingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ItemListaRatingActivity"
-            android:exported="false" />
-        <activity
             android:name=".FormProfileActivity"
-            android:exported="false"
-            android:parentActivityName=".MenuHomeActivity" />
+            android:exported="false" />
         <activity
-            android:name=".FormRatingActivity"
-            android:exported="false"
-            android:parentActivityName=".MenuHomeActivity" />
+            android:name=".ChangeProfileActivity"
+            android:exported="false" />
         <activity
-            android:name=".FormRequestActivity"
+            android:name=".AdicionarRatingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdicionarRequestActivity"
             android:exported="false"
             android:label="Adicionar Request"
             android:parentActivityName=".MenuHomeActivity" />
@@ -40,8 +35,7 @@
             android:parentActivityName=".MenuHomeActivity" />
         <activity
             android:name=".CreateAccountActivity"
-            android:exported="false"
-            android:parentActivityName=".LoginActivity" />
+            android:exported="false" />
         <activity
             android:name=".MenuHomeActivity"
             android:exported="false"

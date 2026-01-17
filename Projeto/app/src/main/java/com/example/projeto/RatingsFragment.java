@@ -47,7 +47,7 @@ public class RatingsFragment extends Fragment implements RatingsListener {
         lvRatings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // 'id' aqui é o ID do item, retornado pelo adapter.getItemId()
+                // 'id' é o ID do item, retornado pelo adapter.getItemId()
                 int ratingId = (int) id;
 
                 Intent intent = new Intent(getContext(), DetalhesRatingActivity.class);

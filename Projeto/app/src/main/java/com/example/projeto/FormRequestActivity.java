@@ -29,7 +29,7 @@ public class FormRequestActivity extends AppCompatActivity implements RequestLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_adicionar_request);
+        setContentView(R.layout.activity_form_request);
 
         SharedPreferences prefs = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String token = prefs.getString("token", "");

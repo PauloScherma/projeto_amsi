@@ -45,4 +45,10 @@
     <string name="save_profile">Save Profile</string>
     <string name="rating">Rating</string>
     <string name="save">save</string>
+    <string name="no_profile_found_please_create_one">No profile found. Please create one.</string>
+    <string name="create_profile">Create Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="status">Status</string>
+    <string name="priority">Priority:</string>
+    <string name="edit_request">Edit Request</string>
 </resources>

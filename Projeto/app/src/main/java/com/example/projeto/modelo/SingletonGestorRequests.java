@@ -13,11 +13,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.projeto.CreateAccountActivity;
 import com.example.projeto.FormProfileActivity;
+import com.example.projeto.listeners.ProfileListener;
 import com.example.projeto.listeners.RatingListener;
 import com.example.projeto.listeners.RatingsListener;
 import com.example.projeto.listeners.RequestListener;
 import com.example.projeto.listeners.RequestsListener;
+import com.example.projeto.utils.ProfileJsonParser;
 import com.example.projeto.utils.RatingJsonParser;
 import com.example.projeto.utils.RequestJsonParser;
 
@@ -37,30 +40,27 @@ public class SingletonGestorRequests {
     private RequestListener requestListener;
     private RatingsListener ratingsListener;
     private RatingListener ratingListener;
+    private ProfileListener profileListener;
 
-    //region ENDPOINTS REQUEST
     private String userRequestsEndpoint = BASE_URL + "/request/requests";
     private String getRequestEndpoint = BASE_URL + "/request/request";
     private String notRatedRequestsEndpoint = BASE_URL + "/request/notrated/requests";
     private String createRequestEndpoint = BASE_URL + "/request/createrequest";
     private String updateRequestEndpoint = BASE_URL + "/request/updaterequest";
     private String deleteRequestEndpoint = BASE_URL + "/request/deleterequest";
-    //endregion
 
-    //region ENDPOINTS RATING
     private String getUserRatingsEndpoint = BASE_URL + "/rating/ratings";
     private String getRatingEndpoint = BASE_URL + "/rating/rating";
     private String createRatingEndpoint = BASE_URL + "/rating/createrating";
     private String updateRatingEndpoint = BASE_URL + "/rating/updaterating";
     private String deleteRatingEndpoint = BASE_URL + "/rating/deleterating";
-    //endregion
 
-    //region ENDPOINTS PROFILE
     private String getUserProfileEndpoint = BASE_URL + "/profile/profile";
     private String createProfileEndpoint = BASE_URL + "/profile/createprofile";
     private String updateProfileEndpoint = BASE_URL + "/profile/updateprofile";
     private String deleteProfileEndpoint = BASE_URL + "/profile/deleteprofile";
-    //endregion
+
+    private String signupEndpoint = BASE_URL + "/user/register";
 
     private static RequestQueue volleyQueue = null;
     private BDHelper bdHelper;
@@ -79,7 +79,6 @@ public class SingletonGestorRequests {
         bdHelper = new BDHelper(context);
     }
 
-    //region Requests Singleton
     public void setRequestsListener(RequestsListener requestsListener) {
         this.requestsListener = requestsListener;
     }
@@ -300,9 +299,7 @@ public class SingletonGestorRequests {
     public BDHelper getBdHelper() {
         return bdHelper;
     }
-    //endregion
 
-    //region Rating Singleton
     public ArrayList<Rating> getRatings() {
         return ratings;
     }
@@ -508,17 +505,6 @@ public class SingletonGestorRequests {
         volleyQueue.add(stringRequest);
     }
 
-    //region Profile Singleton
-    public void setProfileListener(FormProfileActivity changeProfileActivity) {
-    }
-
-    public void getProfileByIdAPI(final Context context, int id){
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String token = prefs.getString("token", "");
-
-        String url = getUserProfileEndpoint + "/" + id + "?access-token=" + token;
-    }
-
     public void setRatingsListener(RatingsListener ratingsListener) {
         this.ratingsListener = ratingsListener;
     }
@@ -559,11 +545,141 @@ public class SingletonGestorRequests {
 
         volleyQueue.add(stringRequest);
     }
-    //endregion
+
+    public void setProfileListener(ProfileListener profileListener) {
+        this.profileListener = profileListener;
+    }
+
+    public void getProfileAPI(final Context context) {RedefineEndpoints(context);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+        String userId = prefs.getString("user_id", "");
+
+        if (userId.isEmpty()) {
+            if (profileListener != null) {
+                profileListener.onRefreshProfile(null);
+            }
+            return;
+        }
+
+        String url = getUserProfileEndpoint + "/" + userId + "?access-token=" + token;
+
+        JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        JSONObject profileJson = response.getJSONObject("profile");
+                        Profile profile = ProfileJsonParser.parserJsonProfile(profileJson);
+                        if (profileListener != null) {
+                            profileListener.onRefreshProfile(profile);
+                        }
+                    } catch (JSONException e) {
+                        System.out.println("Error parsing profile JSON: " + e.getMessage());
+                        if (profileListener != null) {
+                            profileListener.onRefreshProfile(null);
+                        }
+                    }
+                },
+                error -> {
+                    System.out.println("Error getting profile: " + error.getMessage());
+                    if (profileListener != null) {
+                        profileListener.onRefreshProfile(null);
+                    }
+                });
+        volleyQueue.add(request);
+    }
+
+    public void createProfileAPI(final Profile profile, final Context context) {
+        RedefineEndpoints(context);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("first_name", profile.getFirstName());
+            jsonBody.put("last_name", profile.getLastName());
+            jsonBody.put("phone", profile.getPhone());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = createProfileEndpoint + "?access-token=" + token;
+        JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.POST, url, jsonBody,
+                response -> {
+                    // Atualiza o perfil depois de criar
+                    getProfileAPI(context);
+                },
+                error -> System.out.println("Error creating profile: " + error.getMessage()));
+        volleyQueue.add(req);
+    }
+
+    public void updateProfileAPI(final Profile profile, final Context context) {
+        RedefineEndpoints(context);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("first_name", profile.getFirstName());
+            jsonBody.put("last_name", profile.getLastName());
+            jsonBody.put("phone", profile.getPhone());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = updateProfileEndpoint + "/" + profile.getId() + "?access-token=" + token;
+        JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.PUT, url, jsonBody,
+                response -> {
+                    // Atualiza o perfil depois de editar
+                    getProfileAPI(context);
+                },
+                error -> System.out.println("Error updating profile: " + error.getMessage()));
+        volleyQueue.add(req);
+    }
+
+    public void deleteProfileAPI(final int profileId, final Context context) {
+        RedefineEndpoints(context);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+
+        String url = deleteProfileEndpoint + "/" + profileId + "?access-token=" + token;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.DELETE, url,
+                s -> {
+                    if (profileListener != null) {
+                        profileListener.onRefreshProfile(null);
+                    }
+                },
+                error -> System.out.println("Error deleting profile: " + error.getMessage()));
+        volleyQueue.add(stringRequest);
+    }
+
+    public void signupAPI(final User user, final Context context) {
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("username", user.getUsername());
+            jsonBody.put("email", user.getEmail());
+            jsonBody.put("password", user.getPassword());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.POST, signupEndpoint, jsonBody,
+                response -> {
+                    System.out.println("Signup successful: " + response);
+                },
+                error -> {
+                    System.out.println("Signup failed: " + error.getMessage());
+                });
+
+        volleyQueue.add(req);
+    }
+
+
 
     private void RedefineEndpoints(Context context){
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String baseUrl = prefs.getString(KEY_BASE_URL, BASE_URL);
+
+        this.signupEndpoint = baseUrl + "/user/register";
 
         this.userRequestsEndpoint = baseUrl + "/request/requests";
         this.getRequestEndpoint = baseUrl + "/request/request";

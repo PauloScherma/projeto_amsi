@@ -1,115 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="50dp"
     android:orientation="vertical"
     android:gravity="center"
+    android:padding="16dp"
     tools:context=".CreateAccountActivity">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".2"/>
-
     <TextView
-        android:id="@+id/tvSingup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/singup"
-        android:textColor="@color/black"
-        android:textSize="50sp"
-        android:textAllCaps="true"
-        android:textAlignment="center"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/tvSingupDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/grey"
-        android:text="@string/please_fill_out_the_following_fields_to_signup" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".1"/>
-
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/username" />
+        android:text="Create Account"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
 
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:hint="Username"
         android:inputType="text"
-        android:hint="@string/username" />
-
-    <TextView
-        android:id="@+id/tvEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/email" />
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:hint="Email"
         android:inputType="textEmailAddress"
-        android:hint="@string/email" />
-
-    <TextView
-        android:id="@+id/tvPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/password" />
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:hint="Password"
         android:inputType="textPassword"
-        android:hint="@string/password" />
+        android:layout_marginBottom="24dp"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCreateAccount"
+    <Button
+        android:id="@+id/btnSignup"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="@color/black"
-        android:text="@string/singup"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:onClick="onClickCreateAccount"
-        app:cornerRadius="12dp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnBackToLogin"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@android:color/white"
-        android:onClick="onClickGoBackToLogin"
-        android:text="@string/back_to_login"
-        android:textColor="@color/grey"
-        android:textSize="12sp" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".2"/>
+        android:text="Sign Up" />
 
 </LinearLayout>

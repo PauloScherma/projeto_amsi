@@ -17,7 +17,7 @@ public class DetalhesRequestActivity extends AppCompatActivity implements Reques
 
     public static final String ID_REQUEST = "ID";
     private static final int EDIT_REQUEST_CODE = 1;
-    private TextView tvTitle, tvDescription;
+    private TextView tvTitle, tvDescription, tvStatus, tvPriority, tvCreatedAt;
     private FloatingActionButton fabEdit;
     private Request request;
     private int requestId;
@@ -29,6 +29,9 @@ public class DetalhesRequestActivity extends AppCompatActivity implements Reques
 
         tvTitle = findViewById(R.id.tvTitle);
         tvDescription = findViewById(R.id.tvDescription);
+        tvStatus = findViewById(R.id.tvStatus);
+        tvPriority = findViewById(R.id.tvPriority);
+        tvCreatedAt = findViewById(R.id.tvCreatedAt);
         fabEdit = findViewById(R.id.fabEdit);
 
         if (getSupportActionBar() != null) {
@@ -56,6 +59,9 @@ public class DetalhesRequestActivity extends AppCompatActivity implements Reques
             setTitle("Detalhes: " + request.getTitle());
             tvTitle.setText(request.getTitle());
             tvDescription.setText(request.getDescription());
+            tvStatus.setText(request.getStatus().name());
+            tvPriority.setText(request.getPriority().name());
+            tvCreatedAt.setText(request.getCreatedAt());
         }
     }
 
