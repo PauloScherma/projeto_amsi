@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class BDHelper extends SQLiteOpenHelper {
 
-    private static final String NOME_BD = "dbRequests";
+    private static final String NOME_BD = "dbRequests3";
     private static final int DB_VERSION = 4; // Incremented to update schema
 
     // Common Columns
