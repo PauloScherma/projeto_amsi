@@ -34,7 +34,7 @@ public class ProfileFragment extends Fragment {
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ChangeProfileActivity.class);
+                Intent intent = new Intent(getContext(), FormProfileActivity.class);
                 //intent.putExtra(ChangeProfileActivity.ID_PROFILE, id);
                 startActivity(intent);
             }

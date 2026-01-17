@@ -1,6 +1,7 @@
 package com.example.projeto.modelo;
 
 import static com.example.projeto.utils.Constants.BASE_URL;
+import static com.example.projeto.utils.Constants.KEY_BASE_URL;
 import static com.example.projeto.utils.Constants.PREFS_NAME;
 
 import android.content.Context;
@@ -12,12 +13,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.projeto.ChangeProfileActivity;
-import com.example.projeto.RatingFragment;
+import com.example.projeto.FormProfileActivity;
 import com.example.projeto.listeners.RatingListener;
 import com.example.projeto.listeners.RatingsListener;
 import com.example.projeto.listeners.RequestListener;
 import com.example.projeto.listeners.RequestsListener;
+import com.example.projeto.utils.RatingJsonParser;
 import com.example.projeto.utils.RequestJsonParser;
 
 import org.json.JSONArray;
@@ -38,30 +39,31 @@ public class SingletonGestorRequests {
     private RatingListener ratingListener;
 
     //region ENDPOINTS REQUEST
-    private final String userRequestsEndpoint = BASE_URL + "/request/requests";
-    private final String getRequestEndpoint = BASE_URL + "/request/request";
-    private final String createRequestEndpoint = BASE_URL + "/request/createrequest";
-    private final String updateRequestEndpoint = BASE_URL + "/request/updaterequest";
-    private final String deleteRequestEndpoint = BASE_URL + "/request/deleterequest";
+    private String userRequestsEndpoint = BASE_URL + "/request/requests";
+    private String getRequestEndpoint = BASE_URL + "/request/request";
+    private String notRatedRequestsEndpoint = BASE_URL + "/request/notrated/requests";
+    private String createRequestEndpoint = BASE_URL + "/request/createrequest";
+    private String updateRequestEndpoint = BASE_URL + "/request/updaterequest";
+    private String deleteRequestEndpoint = BASE_URL + "/request/deleterequest";
     //endregion
 
     //region ENDPOINTS RATING
-    private final String getUserRatingsEndpoint = BASE_URL + "/rating/ratings";
-    private final String getRatingEndpoint = BASE_URL + "/rating/rating";
-    private final String createRatingEndpoint = BASE_URL + "/rating/createrating";
-    private final String updateRatingEndpoint = BASE_URL + "/rating/updaterating";
-    private final String deleteRatingEndpoint = BASE_URL + "/rating/deleterating";
+    private String getUserRatingsEndpoint = BASE_URL + "/rating/ratings";
+    private String getRatingEndpoint = BASE_URL + "/rating/rating";
+    private String createRatingEndpoint = BASE_URL + "/rating/createrating";
+    private String updateRatingEndpoint = BASE_URL + "/rating/updaterating";
+    private String deleteRatingEndpoint = BASE_URL + "/rating/deleterating";
     //endregion
 
     //region ENDPOINTS PROFILE
-    private final String getUserProfileEndpoint = BASE_URL + "/profile/profile";
-    private final String createProfileEndpoint = BASE_URL + "/profile/createprofile";
-    private final String updateProfileEndpoint = BASE_URL + "/profile/updateprofile";
-    private final String deleteProfileEndpoint = BASE_URL + "/profile/deleteprofile";
+    private String getUserProfileEndpoint = BASE_URL + "/profile/profile";
+    private String createProfileEndpoint = BASE_URL + "/profile/createprofile";
+    private String updateProfileEndpoint = BASE_URL + "/profile/updateprofile";
+    private String deleteProfileEndpoint = BASE_URL + "/profile/deleteprofile";
     //endregion
 
     private static RequestQueue volleyQueue = null;
-    private RequestBDHelper requestsDB;
+    private BDHelper bdHelper;
 
     public static synchronized SingletonGestorRequests getInstance(Context context) {
         if (instance == null) {
@@ -70,14 +72,11 @@ public class SingletonGestorRequests {
         }
         return instance;
     }
-
     private SingletonGestorRequests(Context context) {
         requests = new ArrayList<>();
         ratings = new ArrayList<>();
-        // Adiciona um rating de exemplo
-        ratings.add(new Rating(1, 1, "Excelente Serviço", "O técnico foi muito rápido e eficiente.", 5, "2024-05-21", "2024-05-21"));
 
-        requestsDB = new RequestBDHelper(context);
+        bdHelper = new BDHelper(context);
     }
 
     //region Requests Singleton
@@ -102,15 +101,23 @@ public class SingletonGestorRequests {
         return null;
     }
     public void adicionarRequestBD(Request request) {
-        requestsDB.adicionarRequestBD(request);
+        bdHelper.adicionarRequestBD(request);
     }
     public void editarRequestBD(Request request) {
-        requestsDB.editarRequestBD(request);
+        bdHelper.editarRequestBD(request);
+    }
+
+    public void adicionarRatingBD(Rating rating) {
+        bdHelper.adicionarRatingBD(rating);
     }
     public void adicionarRequestsBD(ArrayList<Request> requests) {
-        requestsDB.removerAllRequestsBD();
+        bdHelper.removerAllRequestsBD();
         for (Request r : requests)
-            requestsDB.adicionarRequestBD(r);
+            bdHelper.adicionarRequestBD(r);
+    }
+
+    public void editarRatingBD(Rating rating) {
+        bdHelper.editarRatingBD(rating);
     }
     public void adicionarRequest(Request request) {
         int newId = 1;
@@ -138,6 +145,7 @@ public class SingletonGestorRequests {
         }
     }
     public void getUserRequestsAPI(final Context context) {
+        RedefineEndpoints(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String token = prefs.getString("token", "");
         String userId = prefs.getString("user_id", "");
@@ -171,6 +179,7 @@ public class SingletonGestorRequests {
             volleyQueue.add(request);
     }
     public void getRequestByIdAPI(final Context context, int id) {
+        RedefineEndpoints(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String token = prefs.getString("token", "");
 
@@ -205,6 +214,7 @@ public class SingletonGestorRequests {
         volleyQueue.add(request);
     }
     public void adicionarRequestAPI(final Request request, final Context context) {
+        RedefineEndpoints(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String token = prefs.getString("token", "");
         String userId = prefs.getString("user_id", "");
@@ -237,6 +247,7 @@ public class SingletonGestorRequests {
         volleyQueue.add(stringRequest);
     }
     public void editarRequestAPI(final Request request, final Context context) {
+        RedefineEndpoints(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String token = prefs.getString("token", "");
 
@@ -267,6 +278,7 @@ public class SingletonGestorRequests {
 
         volleyQueue.add(stringRequest);
     }
+
     public void removerRequestAPI(final Request request, final Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String token = prefs.getString("token", "");
@@ -285,16 +297,12 @@ public class SingletonGestorRequests {
 
         volleyQueue.add(stringRequest);
     }
-    public RequestBDHelper getRequestsDB() {
-        return requestsDB;
+    public BDHelper getBdHelper() {
+        return bdHelper;
     }
     //endregion
 
     //region Rating Singleton
-    public void setRatingListener(RatingListener ratingListener) {
-        this.requestsListener = requestsListener;
-    }
-
     public ArrayList<Rating> getRatings() {
         return ratings;
     }
@@ -306,10 +314,15 @@ public class SingletonGestorRequests {
         }
         return null;
     }
-    public void adicionarRatingBD(ArrayList<Rating> rating) {
-        requestsDB.removerAllRatingsBD();
-        for (Rating r : rating)
-            requestsDB.adicionarRatingBD(r);
+
+    public Rating getRating(){
+        return this.rating;
+    }
+
+    public void adicionarRatingsBD(ArrayList<Rating> ratings) {
+        bdHelper.removerAllRatingsBD();
+        for (Rating r : ratings)
+            bdHelper.adicionarRatingBD(r);
     }
     public void adicionarRating(Rating rating) {
         int newId= 1;
@@ -333,21 +346,201 @@ public class SingletonGestorRequests {
             ratings.remove(ratingToRemove);
         }
     }
-    public void getUserRatignsAPI(final Context context) {
+    public void getUserRatingsAPI(final Context context) {
+        RedefineEndpoints(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String token = prefs.getString("token", "");
         String userId = prefs.getString("user_id", "");
 
         String url = getUserRatingsEndpoint + "/" + userId + "?access-token=" + token;
+        JsonObjectRequest rating = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray ratingArray = response.getJSONArray("requests");
+                            var ratings = RatingJsonParser.parserJsonRatings(ratingArray);
+
+                            SingletonGestorRequests.getInstance(context).adicionarRatingsBD(ratings);
+
+                            if(ratingsListener!=null)
+                                ratingsListener.onRefreshListaRatings(ratings);
+                        } catch (JSONException e) {
+                            System.out.println("All Ratings not found");
+                            System.out.println(e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("Erro");
+                    }
+                });
+
+        volleyQueue.add(rating);
+    }
+
+    public void getRatingByIdAPI(final Context context, int id) {
+        RedefineEndpoints(context);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+
+        String url = getRatingEndpoint + "/" + id + "?access-token=" + token;
         JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Rating rating = null;
+                        try {
+                            rating = RatingJsonParser.parserJsonRating(response.getJSONObject("request"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        SingletonGestorRequests.getInstance(context).adicionarRatingBD(rating);
+
+                        SingletonGestorRequests.this.rating = rating;
+
+                        if (ratingListener != null) {
+                            ratingListener.onRefreshDetalhes();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("Erro");
+                    }
+                });
+
+        volleyQueue.add(request);
+    }
+
+    public void adicionarRatingAPI(final Rating rating, final Context context) {
+        RedefineEndpoints(context);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+        String userId = prefs.getString("user_id", "");
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("request_id", rating.getRequestId());
+            jsonBody.put("title", rating.getTitle());
+            jsonBody.put("description", rating.getDescription());
+            jsonBody.put("score", rating.getScore());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = createRatingEndpoint + "?access-token=" + token;
+        JsonObjectRequest stringRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST, url, jsonBody,
+                s -> {
+                    adicionarRatingBD(RatingJsonParser.parserJsonRating(s));
+
+                    getUserRatingsAPI(context);
+
+                    if(ratingListener!=null)
+                        ratingListener.onRefreshDetalhes();
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("Erro");
+                    }
+                });
+
+        volleyQueue.add(stringRequest);
+    }
+
+    public void editarRatingAPI(final Rating rating, final Context context) {
+        RedefineEndpoints(context);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("request_id", rating.getRequestId());
+            jsonBody.put("title", rating.getTitle());
+            jsonBody.put("description", rating.getDescription());
+            jsonBody.put("score", rating.getScore());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = updateRatingEndpoint + "/" + rating.getId() + "?access-token=" + token;
+        JsonObjectRequest stringRequest = new JsonObjectRequest(com.android.volley.Request.Method.PUT, url, jsonBody,
+                s -> {
+                    editarRatingBD(rating);
+
+                    getUserRatingsAPI(context);
+
+                    if(ratingListener!=null)
+                        ratingListener.onRefreshDetalhes();
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("Erro");
+                    }
+                });
+
+        volleyQueue.add(stringRequest);
+    }
+
+    public void removerRatingAPI(final Rating rating, final Context context) {
+        RedefineEndpoints(context);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+
+        String url = deleteRatingEndpoint + "/" + rating.getId() + "?access-token=" + token;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.DELETE, url,
+                s -> {
+                    getUserRatingsAPI(context);
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("Erro");
+                    }
+                });
+
+        volleyQueue.add(stringRequest);
+    }
+
+    //region Profile Singleton
+    public void setProfileListener(FormProfileActivity changeProfileActivity) {
+    }
+
+    public void getProfileByIdAPI(final Context context, int id){
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+
+        String url = getUserProfileEndpoint + "/" + id + "?access-token=" + token;
+    }
+
+    public void setRatingsListener(RatingsListener ratingsListener) {
+        this.ratingsListener = ratingsListener;
+    }
+
+    public void setRatingListener(RatingListener ratingListener) {
+        this.ratingListener = ratingListener;
+    }
+
+    public void getNotRatedRequestsAPI(final Context context) {
+        RedefineEndpoints(context);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+        String userId = prefs.getString("user_id", "");
+
+        String url = notRatedRequestsEndpoint +"/" + userId + "?access-token=" + token;
+        JsonObjectRequest stringRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray requestsArray = response.getJSONArray("requests");
                             var requests = RequestJsonParser.parserJsonRequests(requestsArray);
-
-                            SingletonGestorRequests.getInstance(context).adicionarRequestsBD(requests);
 
                             if(requestsListener!=null)
                                 requestsListener.onRefreshListaRequests(requests);
@@ -364,25 +557,30 @@ public class SingletonGestorRequests {
                     }
                 });
 
-        volleyQueue.add(request);
-    }
-
-
-    //region Profile Singleton
-    public void setProfileListener(ChangeProfileActivity changeProfileActivity) {
-    }
-
-    public void getProfileByIdAPI(final Context context, int id){
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String token = prefs.getString("token", "");
-
-        String url = getUserProfileEndpoint + "/" + id + "?access-token=" + token;
-
-
-    }
-
-    public void setRatingsListener(RatingFragment ratingFragment) {
-        this.ratingsListener = ratingsListener;
+        volleyQueue.add(stringRequest);
     }
     //endregion
+
+    private void RedefineEndpoints(Context context){
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String baseUrl = prefs.getString(KEY_BASE_URL, BASE_URL);
+
+        this.userRequestsEndpoint = baseUrl + "/request/requests";
+        this.getRequestEndpoint = baseUrl + "/request/request";
+        this.notRatedRequestsEndpoint = baseUrl + "/request/notrated/requests";
+        this.createRequestEndpoint = baseUrl + "/request/createrequest";
+        this.updateRequestEndpoint = baseUrl + "/request/updaterequest";
+        this.deleteRequestEndpoint = baseUrl + "/request/deleterequest";
+
+        this.getUserRatingsEndpoint = baseUrl + "/rating/ratings";
+        this.getRatingEndpoint = baseUrl + "/rating/rating";
+        this.createRatingEndpoint = baseUrl + "/rating/createrating";
+        this.updateRatingEndpoint = baseUrl + "/rating/updaterating";
+        this.deleteRatingEndpoint = baseUrl + "/rating/deleterating";
+
+        this.getUserProfileEndpoint = baseUrl + "/profile/profile";
+        this.createProfileEndpoint = baseUrl + "/profile/createprofile";
+        this.updateProfileEndpoint = baseUrl + "/profile/updateprofile";
+        this.deleteProfileEndpoint = baseUrl + "/profile/deleteprofile";
+    }
 }

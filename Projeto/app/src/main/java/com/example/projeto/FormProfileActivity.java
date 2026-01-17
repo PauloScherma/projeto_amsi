@@ -8,13 +8,10 @@ import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.projeto.modelo.SingletonGestorRequests;
 
-public class ChangeProfileActivity extends AppCompatActivity {
+public class FormProfileActivity extends AppCompatActivity {
 
     public static final String ID_PROFILE = "ID";
     private int id;

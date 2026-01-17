@@ -6,10 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +18,7 @@ import com.example.projeto.modelo.Request;
 import com.example.projeto.modelo.SingletonGestorRequests;
 import com.example.projeto.modelo.Status;
 
-public class AdicionarRequestActivity extends AppCompatActivity implements RequestListener {
+public class FormRequestActivity extends AppCompatActivity implements RequestListener {
 
     public static final String ID_REQUEST = "ID";
     private EditText etTitle, etDescription;
@@ -86,7 +84,7 @@ public class AdicionarRequestActivity extends AppCompatActivity implements Reque
                     }
                     finish();
                 } else {
-                    Toast.makeText(AdicionarRequestActivity.this, "Preencha todos os campos obrigatórios", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FormRequestActivity.this, "Preencha todos os campos obrigatórios", Toast.LENGTH_SHORT).show();
                 }
             }
         });

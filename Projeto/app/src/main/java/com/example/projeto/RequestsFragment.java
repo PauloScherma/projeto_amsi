@@ -20,7 +20,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class RequestsFragment extends Fragment implements RequestsListener {
-    private RequestsListener requestsListener;
     private ListView lvRequests;
     private ArrayList<Request> requests = new ArrayList<>();
     private FloatingActionButton fabAdd;
@@ -39,8 +38,6 @@ public class RequestsFragment extends Fragment implements RequestsListener {
         SingletonGestorRequests.getInstance(getContext()).setRequestsListener(this);
         SingletonGestorRequests.getInstance(getContext()).getUserRequestsAPI(getContext());
 
-        // requests = SingletonGestorRequests.getInstance(getContext()).getRequests();
-
         adapter = new ListaRequestsAdaptador(getContext(), requests);
         lvRequests.setAdapter(adapter);
 
@@ -56,7 +53,7 @@ public class RequestsFragment extends Fragment implements RequestsListener {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AdicionarRequestActivity.class);
+                Intent intent = new Intent(getContext(), FormRequestActivity.class);
                 startActivity(intent);
             }
         });

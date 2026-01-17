@@ -1,5 +1,8 @@
 package com.example.projeto;
 
+import static com.example.projeto.utils.Constants.KEY_BASE_URL;
+import static com.example.projeto.utils.Constants.PREFS_NAME;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,8 +19,7 @@ public class SettingsFragment extends Fragment {
 
     private EditText edtBaseUrl;
     private Button btnSave;
-    private static final String PREFS_NAME = "APP_PREFS";
-    private static final String KEY_BASE_URL = "base_url";
+
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -40,11 +42,12 @@ public class SettingsFragment extends Fragment {
             String url = edtBaseUrl.getText().toString().trim();
 
             if (url.isEmpty()) {
-                Toast.makeText(getContext(), "A URL não pode estar vazia", Toast.LENGTH_SHORT).show();
-                return;
+                prefs.edit().remove(KEY_BASE_URL).apply();
+            }
+            else {
+                prefs.edit().putString(KEY_BASE_URL, url).apply();
             }
 
-            prefs.edit().putString(KEY_BASE_URL, url).apply();
             Toast.makeText(getContext(), "Configuração guardada", Toast.LENGTH_SHORT).show();
         });
 

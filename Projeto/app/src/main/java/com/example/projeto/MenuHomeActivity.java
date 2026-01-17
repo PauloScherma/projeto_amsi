@@ -1,35 +1,27 @@
 package com.example.projeto;
 
+import static com.example.projeto.utils.Constants.PREFS_NAME;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.projeto.modelo.Rating;
 import com.google.android.material.navigation.NavigationView;
 
-
-
 public class MenuHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    public static final int EDIT = 100, ADD = 200;
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private String email;
@@ -37,10 +29,18 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); // Call this first
-        setContentView(R.layout.activity_menu_home); // Then set the layout
+        super.onCreate(savedInstanceState);
 
-        // Initialize views and managers
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString("token", null);
+
+        if (token == null || token.isEmpty()) {
+            redirectToLogin();
+            return;
+        }
+
+        setContentView(R.layout.activity_menu_home);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawerLayout);
@@ -56,19 +56,16 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
 
         setTitle("Home");
 
-        // NOW you can safely use fragmentManager and navigationView
         if (savedInstanceState == null) {
             fragmentManager.beginTransaction()
                     .replace(R.id.contentFragment, new HomeFragment())
                     .commit();
-            // navigationView.setCheckedItem(R.id.navHome);
         }
     }
 
     private void carregarCabecalho() {
         email = getIntent().getStringExtra("EMAIL");
-        // se recebeu email => armazena SharedPref
-        // caso contrario => vai carregar o que existe no shared
+
         SharedPreferences sharedPrefUser= getSharedPreferences("DADOS_USER", Context.MODE_PRIVATE);
         if (email!=null){
             SharedPreferences.Editor editor=sharedPrefUser.edit();
@@ -94,7 +91,7 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
             fragment = new RequestsFragment();
             setTitle("Requests");
         } else if (menuItem.getItemId()==R.id.navDocuments) {
-            fragment = new RatingFragment();
+            fragment = new RatingsFragment();
             setTitle("Rating");
         }else if (menuItem.getItemId()==R.id.navProfile) {
             setTitle("Profile");
@@ -104,9 +101,10 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
             setTitle("Settings");
             fragment = new SettingsFragment();
         }else if (menuItem.getItemId()==R.id.navLogout) {
-            Intent intent = new Intent(this , LoginActivity.class);
-            startActivity(intent);
-            finish();
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            prefs.edit().clear().apply();
+
+            redirectToLogin();
         }
 
         if (fragment!= null)
@@ -117,15 +115,12 @@ public class MenuHomeActivity extends AppCompatActivity implements NavigationVie
         return true;
     }
 
-    public void onClickCreateRequest(View view) {
-        System.out.println("Request");
-    }
+    private void redirectToLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
 
-    public void onClickCreateProfile(View view) {
-        System.out.println("Profile");
-    }
-
-    public void onClickAddDocument(View view) {
-        System.out.println("Documents");
+        // Flags para limpar a pilha de atividades e impedir o utilizador de voltar atrás.
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

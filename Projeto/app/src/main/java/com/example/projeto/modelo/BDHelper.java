@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class RequestBDHelper extends SQLiteOpenHelper {
+public class BDHelper extends SQLiteOpenHelper {
 
     private static final String NOME_BD = "dbRequests3";
     private static final int DB_VERSION = 4; // Incremented to update schema
@@ -18,6 +18,7 @@ public class RequestBDHelper extends SQLiteOpenHelper {
     // Common Columns
     private static final String ID = "id";
     private static final String CREATED_AT = "created_at";
+    private static final String CREATED_BY = "created_by";
     private static final String UPDATED_AT = "updated_at";
     private static final String TITLE = "title";
     private static final String DESCRIPTION = "description";
@@ -43,7 +44,7 @@ public class RequestBDHelper extends SQLiteOpenHelper {
     private static final String REQUEST_ID = "request_id";
     private static final String SCORE = "score";
 
-    public RequestBDHelper(@Nullable Context context) {
+    public BDHelper(@Nullable Context context) {
         super(context, NOME_BD, null, DB_VERSION);
     }
 
@@ -175,7 +176,7 @@ public class RequestBDHelper extends SQLiteOpenHelper {
         values.put(DESCRIPTION, r.getDescription());
         values.put(SCORE, r.getScore());
         values.put(CREATED_AT, r.getCreatedAt());
-        values.put(UPDATED_AT, r.getUpdatedAt());
+        values.put(CREATED_BY, r.getCreatedBy());
         db.insert(TABELA_RATING, null, values);
     }
 
@@ -186,8 +187,6 @@ public class RequestBDHelper extends SQLiteOpenHelper {
         values.put(TITLE, r.getTitle());
         values.put(DESCRIPTION, r.getDescription());
         values.put(SCORE, r.getScore());
-        values.put(CREATED_AT, r.getCreatedAt());
-        values.put(UPDATED_AT, r.getUpdatedAt());
         int numLinhas = db.update(TABELA_RATING, values, ID + " = ?", new String[]{String.valueOf(r.getId())});
         return numLinhas > 0;
     }
@@ -216,7 +215,7 @@ public class RequestBDHelper extends SQLiteOpenHelper {
                         cursor.getString(3), // description
                         cursor.getInt(4),   // score
                         cursor.getString(5), // created_at
-                        cursor.getString(6)  // updated_at
+                        cursor.getString(6)  // created_by
                 );
                 ratings.add(auxRating);
             } while (cursor.moveToNext());

@@ -1,12 +1,16 @@
 package com.example.projeto.adaptadores;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.projeto.R;
 import com.example.projeto.modelo.Rating;
@@ -52,7 +56,26 @@ public class ListaRatingAdaptador extends BaseAdapter {
             viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         }
-        viewHolder.update(ratings.get(i));
+        final Rating currentRating = ratings.get(i);
+
+        viewHolder.update(currentRating);
+        viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(context)
+                        .setTitle("Apagar Pedido")
+                        .setMessage("Tem a certeza que deseja apagar este pedido?")
+                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SingletonGestorRequests.getInstance(context).removerRatingAPI(currentRating, context);
+                                Toast.makeText(context, "Pedido a ser apagado...", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Não", null) // Não faz nada se o utilizador clicar em "Não"
+                        .show();
+            }
+        });
 
 
         return view;

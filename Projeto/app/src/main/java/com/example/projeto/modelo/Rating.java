@@ -7,16 +7,16 @@ public class Rating {
     private String description;
     private int score;
     private String createdAt;
-    private String updatedAt;
+    private String createdBy;
 
-    public Rating(int id, int requestId, String title, String description, int score, String createdAt, String updatedAt) {
+    public Rating(int id, int requestId, String title, String description, int score, String createdAt, String createdBy) {
         this.id = id;
         this.requestId = requestId;
         this.title = title;
         this.description = description;
         this.score = score;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdBy = createdBy;
     }
 
     public int getId() {
@@ -67,11 +67,11 @@ public class Rating {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 }
